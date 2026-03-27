@@ -27,3 +27,40 @@ void loop() {
     prev_ms = millis();
   }
 }
+
+
+or or or 
+#include <MPU6050_tockn.h>
+#include <Wire.h>
+
+MPU6050 mpu6050(Wire);
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin();
+  Wire.setClock(100000);  // 🔥 stability
+
+  Serial.println("MPU START");
+
+  mpu6050.begin();   // should NOT hang now
+
+  Serial.println("Calibrating... Keep still");
+  delay(2000);
+
+  mpu6050.calcGyroOffsets(true);
+
+  Serial.println("READY");
+}
+
+void loop() {
+  mpu6050.update();
+
+  Serial.print("X: ");
+  Serial.print(mpu6050.getAngleX());
+  Serial.print("  Y: ");
+  Serial.print(mpu6050.getAngleY());
+  Serial.print("  Z: ");
+  Serial.println(mpu6050.getAngleZ());
+
+  delay(100);
+}
